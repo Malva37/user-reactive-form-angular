@@ -2,13 +2,11 @@ import { Framework } from './Framework';
 import { Hobby } from './Hobby';
 
 export interface User {
-  id: number | null;
-
   firstName: string,
   lastName: string,
-  dateOfBirth: Date,
+  dateOfBirth: string,
   framework: Framework,
   frameworkVersion: string,
   email: string,
-  hobbies: Hobby[],
+  hobby: Hobby[],
 }

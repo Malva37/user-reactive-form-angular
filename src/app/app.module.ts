@@ -27,6 +27,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
 
 const routes: Routes = [
   {
@@ -68,6 +70,7 @@ const routes: Routes = [
     MatDialogModule,
     MatMomentDateModule,
     // MatSnackBarModule,
+    MatTableModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -75,6 +78,7 @@ const routes: Routes = [
     MatNativeDateModule,
     MatSelectModule,
     MatProgressSpinnerModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

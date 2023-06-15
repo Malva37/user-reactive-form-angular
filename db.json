@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "firstName": "hfh",
+      "lastName": "hfh",
+      "dateOfBirth": "06-06-2023",
+      "framework": "react",
+      "frameworkVersion": "4.3.1",
+      "email": "hfh@kjkj.vlvl",
+      "hobby": [
+        {
+          "name": "hdhdh",
+          "duration": "4 month"
+        }
+      ],
+      "id": 2
+    }
+  ]
+}

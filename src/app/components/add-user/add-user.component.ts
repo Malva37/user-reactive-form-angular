@@ -8,11 +8,12 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-// import { UsersFromServerService } from 'src/app/services/users-from-server.service';
-import { User } from '../../types/User';
+import { User } from '../../../types/User';
 import * as moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
-import { Framework } from 'src/app/types/Framework';
+import { Framework } from 'src/types/Framework';
+import { UsersService } from 'src/app/services/users.service';
+import { MessageComponent } from '../message/message.component';
 
 @Component({
   selector: 'app-add-user',
@@ -22,18 +23,17 @@ import { Framework } from 'src/app/types/Framework';
 export class AddUserComponent implements OnInit {
   showLoader = false;
   @ViewChild('emailInput') emailInput!: ElementRef<HTMLInputElement>;
-  // hobbies: FormGroup[] = [];
   createUserForm!: FormGroup;
   frameworks = Object.keys(Framework);
   selectedVersions: string[] | null = null;
   versions: any = {
-    ANGULAR: ['Angular 11', 'Angular 12', 'Angular 13'],
-    REACT: ['React 16', 'React 17', 'React 18'],
-    VUE: ['Vue 2', 'Vue 3'],
+    angular: ['1.1.1', '1.2.1', '1.3.3'],
+    react: ['2.1.2', '3.2.4', '4.3.1'],
+    vue: ['3.3.1', '5.2.1', '5.1.3'],
   };
 
   constructor(
-    // public usersFromServerService: UsersFromServerService,
+    public usersService: UsersService,
 
     private fb: FormBuilder,
     public dialog: MatDialog
@@ -67,7 +67,6 @@ export class AddUserComponent implements OnInit {
         asyncValidators: [this.checkEmailExists.bind(this)],
         updateOn: 'blur',
       }),
-      // hobbies: new FormArray([], Validators.required)
       hobbies: this.fb.array([
         this.fb.group({
           name: ['', Validators.required],
@@ -92,9 +91,9 @@ export class AddUserComponent implements OnInit {
     this.hobbies.push(this.newHobby());
   }
 
-  deleteHobby(hobbyIndex: number) {
-    this.hobbies.removeAt(hobbyIndex);
-  }
+  // deleteHobby(hobbyIndex: number) {
+  //   this.hobbies.removeAt(hobbyIndex);
+  // }
 
   validateFramework(): void {
     this.createUserForm.get('framework')?.valueChanges.subscribe((value) => {
@@ -132,46 +131,73 @@ export class AddUserComponent implements OnInit {
   }
 
   createUser() {
-    const firstName = this.createUserForm.get('firstName')?.value || '';
-    const lastName = this.createUserForm.get('lastName')?.value || '';
-    const dateOfBirth =
-      moment(this.createUserForm.get('dateOfBirth')?.value).toDate() ||
-      new Date(Date.now());
-    const framework = this.createUserForm.get('framework')?.value || '';
-    const frameworkVersion =
-      this.createUserForm.get('frameworkVersion')?.value || '';
-    const email = this.createUserForm.get('email')?.value || '';
-    const hobbies = this.createUserForm.get('hobbies')?.value || [];
+    const firstName = this.createUserForm.get('firstName')?.value;
+    const lastName = this.createUserForm.get('lastName')?.value;
+    const dateOfBirth = moment(
+      this.createUserForm.get('dateOfBirth')?.value
+    ).format('DD-MM-YYYY');
+    const framework = this.createUserForm.get('framework')?.value;
+    const frameworkVersion = this.createUserForm.get('frameworkVersion')?.value;
+    const email = this.createUserForm.get('email')?.value;
+    const hobbies = this.createUserForm.get('hobbies')?.value;
 
     console.log(frameworkVersion);
 
     const newUser: User = {
-      id: null,
       firstName,
       lastName,
       dateOfBirth,
       framework,
       frameworkVersion,
       email,
-      hobbies,
+      hobby: hobbies,
     };
 
     console.log(newUser, 'newUser');
 
-
-    // this.usersFromServerService.createUser(newUser).subscribe({
-    //   next: () => {
-    //     this.dialog.open(MessageComponent, {
-    //       data: 'User is already created, you can check it in the Users component',
-    //     });
-    //   },
-    // });
-    this.createUserForm.reset();
-    this.createUserForm.markAsUntouched();
+    this.usersService.createUser(newUser).subscribe({
+      next: () => {
+        this.dialog.open(MessageComponent, {
+          data: 'User is already created, you can check it in the Users component',
+        });
+      },
+    });
+    // this.createUserForm.reset();
+    // this.createUserForm.markAsUntouched();
+    this.reset();
   }
 
   reset() {
     this.createUserForm.reset();
+    // this.hobbies.removeAt(0);
+    // this.hobbies.at(0).reset({
+    //   name: '',
+    //   duration: '',
+    // });
+
+    while (this.hobbies.length > 1) {
+      this.hobbies.removeAt(this.hobbies.length - 1);
+    }
+
+    this.hobbies.at(0).reset({
+      name: '',
+      duration: '',
+    });
+
+    // this.createUserForm.reset({
+    //   firstName: '',
+    //   lastName: '',
+    //   dateOfBirth: '',
+    //   framework: '',
+    //   frameworkVersion: '',
+    //   email: '',
+    //   hobbies: [
+    //     this.fb.group({
+    //       name: '',
+    //       duration: '',
+    //     })
+    //   ]
+    // });
     this.createUserForm.markAsUntouched();
   }
 }
