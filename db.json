@@ -1,19 +1,38 @@
 {
   "users": [
     {
-      "firstName": "hfh",
-      "lastName": "hfh",
-      "dateOfBirth": "06-06-2023",
-      "framework": "react",
-      "frameworkVersion": "4.3.1",
-      "email": "hfh@kjkj.vlvl",
+      "firstName": "Ira",
+      "lastName": "Pysanko",
+      "dateOfBirth": "22-06-2023",
+      "framework": "angular",
+      "frameworkVersion": "1.3.3",
+      "email": "irynapysanko@gmail.com",
       "hobby": [
         {
-          "name": "hdhdh",
-          "duration": "4 month"
+          "name": "hiking",
+          "duration": "6 month"
         }
       ],
-      "id": 2
+      "id": 3
+    },
+    {
+      "firstName": "Mark",
+      "lastName": "Ipson",
+      "dateOfBirth": "07-06-2023",
+      "framework": "angular",
+      "frameworkVersion": "1.2.1",
+      "email": "mark@gmail.com",
+      "hobby": [
+        {
+          "name": "lego",
+          "duration": "4 month"
+        },
+        {
+          "name": "pain",
+          "duration": "1 month"
+        }
+      ],
+      "id": 4
     }
   ]
 }

@@ -34,16 +34,13 @@ export class AddUserComponent implements OnInit {
 
   constructor(
     public usersService: UsersService,
-
     private fb: FormBuilder,
     public dialog: MatDialog
   ) {
     this.createForm();
-    this.validateFramework();
   }
 
   ngOnInit() {
-    // this.createForm();
     this.validateFramework();
   }
 
@@ -91,10 +88,6 @@ export class AddUserComponent implements OnInit {
     this.hobbies.push(this.newHobby());
   }
 
-  // deleteHobby(hobbyIndex: number) {
-  //   this.hobbies.removeAt(hobbyIndex);
-  // }
-
   validateFramework(): void {
     this.createUserForm.get('framework')?.valueChanges.subscribe((value) => {
       const frameworkVersionControl =
@@ -141,8 +134,6 @@ export class AddUserComponent implements OnInit {
     const email = this.createUserForm.get('email')?.value;
     const hobbies = this.createUserForm.get('hobbies')?.value;
 
-    console.log(frameworkVersion);
-
     const newUser: User = {
       firstName,
       lastName,
@@ -153,27 +144,19 @@ export class AddUserComponent implements OnInit {
       hobby: hobbies,
     };
 
-    console.log(newUser, 'newUser');
-
     this.usersService.createUser(newUser).subscribe({
       next: () => {
         this.dialog.open(MessageComponent, {
-          data: 'User is already created, you can check it in the Users component',
+          data: 'User is already created, you can check it in the Users list',
         });
       },
     });
-    // this.createUserForm.reset();
-    // this.createUserForm.markAsUntouched();
+
     this.reset();
   }
 
   reset() {
     this.createUserForm.reset();
-    // this.hobbies.removeAt(0);
-    // this.hobbies.at(0).reset({
-    //   name: '',
-    //   duration: '',
-    // });
 
     while (this.hobbies.length > 1) {
       this.hobbies.removeAt(this.hobbies.length - 1);
@@ -184,20 +167,6 @@ export class AddUserComponent implements OnInit {
       duration: '',
     });
 
-    // this.createUserForm.reset({
-    //   firstName: '',
-    //   lastName: '',
-    //   dateOfBirth: '',
-    //   framework: '',
-    //   frameworkVersion: '',
-    //   email: '',
-    //   hobbies: [
-    //     this.fb.group({
-    //       name: '',
-    //       duration: '',
-    //     })
-    //   ]
-    // });
     this.createUserForm.markAsUntouched();
   }
 }
