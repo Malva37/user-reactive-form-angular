@@ -10,5 +10,5 @@ export interface User {
   framework: Framework,
   frameworkVersion: string,
   email: string,
-  hobby: Hobby[],
+  hobbies: Hobby[],
 }

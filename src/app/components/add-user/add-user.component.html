@@ -89,7 +89,7 @@
           <span *ngIf="createUserForm.get('hobby')?.hasError('required')">hobby is required</span>
         </mat-error>
       </mat-form-field> -->
-
+<!--
       <div class="example-form-fields example-full-width" formArrayName="hobbies">
         <div *ngFor="let hobbyGroup of hobbies; let i = index" [formGroupName]="i">
           <mat-form-field>
@@ -114,7 +114,48 @@
         </div>
       </div>
 
-      <button mat-raised-button color="primary" (click)="addHobby()">Add Hobby</button>
+      <button mat-raised-button color="primary" (click)="addHobby()">Add Hobby</button> -->
+
+
+
+
+      <h3>Add hobby:</h3>
+    <ng-container formArrayName="hobbies">
+        <ng-container *ngFor="let hobby of hobbies.controls; let i = index">
+            <div class="example-form-fields" [formGroupName]="i">
+                <mat-form-field appearance="fill">
+                    <input matInput
+                           formControlName="name"
+                           placeholder="Hobby name">
+                    <mat-error *ngIf="hobbies.get('name')?.hasError('required')">
+                      <span *ngIf="hobbies.get('name')?.hasError('required')">name is required</span>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-select formControlName="duration"
+                            placeholder="Hobby duration">
+                        <mat-option value="1">1 month</mat-option>
+                        <mat-option value="2">2 month</mat-option>
+                        <mat-option value="3">3 month</mat-option>
+                        <mat-option value="3">4 month</mat-option>
+                        <mat-option value="3">5 month</mat-option>
+                        <mat-option value="3">6 month</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="createUserForm.get('hobbies')?.get('duration')?.hasError('required')">
+                      <span *ngIf="createUserForm.get('hobbies')?.get('duration')?.hasError('required')">duration is required</span>
+                    </mat-error>
+                </mat-form-field>
+                <mat-icon class="delete-btn" (click)="deleteHobby(i)">
+                    X</mat-icon>
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <button mat-mini-fab type="button" [disabled]="!hobbies.valid" (click)="addHobby()">
+        <mat-icon class="add-course-btn">add</mat-icon>
+    </button>
+
+<!-- </div> -->
 
   </form>
 

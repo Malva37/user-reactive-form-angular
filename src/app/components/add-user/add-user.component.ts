@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
+  FormBuilder,
   FormControl,
   FormGroup,
   ValidationErrors,
@@ -33,6 +34,8 @@ export class AddUserComponent implements OnInit {
 
   constructor(
     // public usersFromServerService: UsersFromServerService,
+
+    private fb: FormBuilder,
     public dialog: MatDialog
   ) {
     this.createForm();
@@ -45,7 +48,7 @@ export class AddUserComponent implements OnInit {
   }
 
   createForm() {
-    this.createUserForm = new FormGroup({
+    this.createUserForm = this.fb.group({
       firstName: new FormControl('', [
         Validators.required,
         Validators.minLength(2),
@@ -64,35 +67,33 @@ export class AddUserComponent implements OnInit {
         asyncValidators: [this.checkEmailExists.bind(this)],
         updateOn: 'blur',
       }),
-      hobbies: new FormArray([], Validators.required)
+      // hobbies: new FormArray([], Validators.required)
+      hobbies: this.fb.array([
+        this.fb.group({
+          name: ['', Validators.required],
+          duration: ['', Validators.required],
+        }),
+      ]),
     });
   }
 
-  get hobbies(): AbstractControl[] {
-    return (this.createUserForm.get('hobbies') as FormArray)?.controls || [];
+  get hobbies(): FormArray {
+    return this.createUserForm.get('hobbies') as FormArray;
   }
 
-  isFieldInvalid(fieldName: string) {
-    const field = this.createUserForm.get(fieldName);
-    return field?.invalid && field?.touched;
+  newHobby(): FormGroup {
+    return this.fb.group({
+      name: ['', Validators.required],
+      duration: ['', Validators.required],
+    });
   }
 
   addHobby() {
-    const hobbies = this.createUserForm.get('hobbies') as FormArray;
-
-    const hobbyFormGroup = new FormGroup({
-      name: new FormControl('', [Validators.required]),
-      duration: new FormControl('', [Validators.required])
-    });
-
-    hobbies.push(hobbyFormGroup);
-
-    hobbyFormGroup.markAsUntouched();
-    this.createUserForm.markAsUntouched();
+    this.hobbies.push(this.newHobby());
   }
 
-  removeHobby(index: number) {
-    this.hobbies.splice(index, 1);
+  deleteHobby(hobbyIndex: number) {
+    this.hobbies.removeAt(hobbyIndex);
   }
 
   validateFramework(): void {
@@ -140,7 +141,7 @@ export class AddUserComponent implements OnInit {
     const frameworkVersion =
       this.createUserForm.get('frameworkVersion')?.value || '';
     const email = this.createUserForm.get('email')?.value || '';
-    const hobby = this.createUserForm.get('hobby')?.value || '';
+    const hobbies = this.createUserForm.get('hobbies')?.value || [];
 
     console.log(frameworkVersion);
 
@@ -152,8 +153,11 @@ export class AddUserComponent implements OnInit {
       framework,
       frameworkVersion,
       email,
-      hobby,
+      hobbies,
     };
+
+    console.log(newUser, 'newUser');
+
 
     // this.usersFromServerService.createUser(newUser).subscribe({
     //   next: () => {
